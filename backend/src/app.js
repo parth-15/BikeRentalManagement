@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from 'morgan';
 import applyDatabaseSetup from './utils/db';
+import routes from './routes';
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 applyDatabaseSetup();
 
-// app.use('/api/v1', routes);
+app.use('/api/v1', routes);
 
 //for error handling
 app.use((err, req, res, next) => {
