@@ -29,8 +29,17 @@ class ReserveController {
     }
   }
 
+  //FIXME: test this properly
   async createReserve(req, res) {
     try {
+      const {bike, from, to} = req.body;
+      const isReserved = await reserveService.isBikeReserved(bike, from, to);
+      console.log(isReserved);
+      if (isReserved) {
+        return res
+          .status(400)
+          .json({success: false, error: 'Bike already reserved'});
+      }
       const reserveId = await reserveService.create(req.body);
       res.status(201).json({success: true, data: {id: reserveId}});
     } catch (e) {

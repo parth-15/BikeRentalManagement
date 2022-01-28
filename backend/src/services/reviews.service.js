@@ -1,4 +1,7 @@
+import mongoose from 'mongoose';
+
 import Review from '../models/review.model';
+import bikesService from './bikes.service';
 
 class ReviewsService {
   async list(page, perPage) {
@@ -19,6 +22,9 @@ class ReviewsService {
   }
 
   async findById(reviewId) {
+    if (!mongoose.isValidObjectId(reviewId)) {
+      return null;
+    }
     const review = await Review.findById(reviewId);
     return review;
   }
@@ -38,6 +44,25 @@ class ReviewsService {
       rating: reviewData.rating,
     });
     const savedReview = await review.save();
+    const entries = await Review.aggregate([
+      {
+        $match: {
+          bike: {
+            $eq: new mongoose.Types.ObjectId(reviewData.bike),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$bike',
+          avg: {
+            $avg: '$rating',
+          },
+        },
+      },
+    ]);
+    console.log(entries);
+    await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return savedReview.id;
   }
 
@@ -51,6 +76,25 @@ class ReviewsService {
       },
       {new: true},
     );
+    const entries = await Review.aggregate([
+      {
+        $match: {
+          bike: {
+            $eq: new mongoose.Types.ObjectId(reviewData.bike),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$bike',
+          avg: {
+            $avg: '$rating',
+          },
+        },
+      },
+    ]);
+    console.log(entries);
+    await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return updatedReview.id;
   }
 

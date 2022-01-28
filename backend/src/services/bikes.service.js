@@ -1,15 +1,44 @@
+/* eslint-disable dot-notation */
+import mongoose from 'mongoose';
+
 import Bike from '../models/bike.model';
+import Reserve from '../models/reserve.model';
 
 class BikesService {
-  async list(page, perPage, model, color, location, rating) {
+  //FIXME: check following function properly
+  async list(
+    page,
+    perPage,
+    model,
+    color,
+    location,
+    rating,
+    startDate,
+    endDate,
+  ) {
     let bikes;
     let count = 0;
-    const filterObj = {model, color, location};
+    const filterObj = {};
+    if (model) {
+      filterObj['model'] = model;
+    }
+    if (color) {
+      filterObj['color'] = color;
+    }
+    if (location) {
+      filterObj['location'] = location;
+    }
+    const overlappingBikes = await Reserve.find({
+      from: {$lte: endDate},
+      to: {$gte: startDate},
+    }).select('bike');
+    console.log(overlappingBikes);
     count = await Bike.countDocuments({
       ...filterObj,
       rating: {
         $gte: rating,
       },
+      _id: {$nin: overlappingBikes},
     });
 
     await Bike.paginate(
@@ -18,6 +47,7 @@ class BikesService {
         rating: {
           $gte: rating,
         },
+        _id: {$nin: overlappingBikes},
       },
       {page: page + 1, limit: perPage},
     ).then(result => {
@@ -33,6 +63,9 @@ class BikesService {
   }
 
   async findById(bikeId) {
+    if (!mongoose.isValidObjectId(bikeId)) {
+      return null;
+    }
     const bike = await Bike.findById(bikeId);
     return bike;
   }
@@ -55,6 +88,17 @@ class BikesService {
         color: bikeData.color,
         location: bikeData.location,
         available: bikeData.available,
+      },
+      {new: true},
+    );
+    return updatedBike.id;
+  }
+
+  async updateBikeRating(bikeId, rating) {
+    const updatedBike = await Bike.findByIdAndUpdate(
+      bikeId,
+      {
+        rating: rating,
       },
       {new: true},
     );

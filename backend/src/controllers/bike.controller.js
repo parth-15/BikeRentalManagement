@@ -4,7 +4,13 @@ class BikeController {
   async listBikes(req, res) {
     try {
       const page = parseInt(req.query.page, 10) || 0;
-      const {model, color, location} = req.query;
+      const {model, color, location, startdate, enddate} = req.query;
+      if (!startdate || !enddate) {
+        res.status(400).json({
+          success: false,
+          error: 'Startdate and enddate is required',
+        });
+      }
       const rating = parseInt(req.query.rating, 10) || 0;
       const bikes = await bikesService.list(
         page,
@@ -13,6 +19,8 @@ class BikeController {
         color,
         location,
         rating,
+        startdate,
+        enddate,
       );
       res.status(200).json({
         success: true,
@@ -65,7 +73,7 @@ class BikeController {
 
   async removeBike(req, res) {
     try {
-      const bike = await bikesService.readById(req.params.bikeId);
+      const bike = await bikesService.findById(req.params.bikeId);
 
       if (!bike) {
         return res.status(404).json({success: false, error: 'Bike not found'});

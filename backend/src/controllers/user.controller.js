@@ -39,6 +39,12 @@ class UserController {
 
   async createUser(req, res) {
     try {
+      if (req.body.role === 'manager' && req.user.role !== 'manager') {
+        return res.status(403).json({
+          success: false,
+          error: 'Not authorised.',
+        });
+      }
       const userByUsername = await usersService.findByUsername(
         req.body.username,
       );
@@ -62,12 +68,22 @@ class UserController {
 
   async updateUserById(req, res) {
     try {
-      const user = await usersService.readById(req.params.userId);
+      const user = await usersService.findById(req.params.userId);
 
       if (!user) {
         return res
           .status(404)
           .json({success: false, error: 'User does not exist'});
+      }
+
+      const userByUsername = await usersService.findByUsername(
+        req.body.username,
+      );
+      if (userByUsername && userByUsername.id !== req.params.userId) {
+        return res.status(400).json({
+          success: false,
+          error: 'User already exists with this username',
+        });
       }
 
       if (req.body.password != null) {
@@ -84,10 +100,12 @@ class UserController {
 
   async removeUser(req, res) {
     try {
-      const user = await usersService.readById(req.params.userId);
+      const user = await usersService.findById(req.params.userId);
 
       if (!user) {
-        res.status(404).json({success: false, error: 'User does not exist'});
+        return res
+          .status(404)
+          .json({success: false, error: 'User does not exist'});
       }
 
       await usersService.deleteById(req.params.userId);

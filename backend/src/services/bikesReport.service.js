@@ -23,9 +23,9 @@ class BikesReportService {
   async list(bikeId, page, perPage) {
     let reserves;
     let count = 0;
-    count = await Reserve.countDocuments({user: bikeId});
+    count = await Reserve.countDocuments({bike: bikeId});
     await Reserve.paginate(
-      {user: bikeId},
+      {bike: bikeId},
       {page: page + 1, limit: perPage},
     ).then(result => {
       reserves = result.docs;

@@ -4,7 +4,6 @@ import {AUTHORIZATION, BEARER} from '../utils/constants';
 
 async function isAuthenticated(req, res, next) {
   const jwtSecret = process.env.JWT_SECRET;
-
   if (req.headers[AUTHORIZATION]) {
     try {
       const authorization = req.headers[AUTHORIZATION].split(' ');

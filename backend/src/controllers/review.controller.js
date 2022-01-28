@@ -1,6 +1,7 @@
 import bikesService from '../services/bikes.service';
 import reviewsService from '../services/reviews.service';
 import usersService from '../services/users.service';
+import reservesService from '../services/reserves.service';
 
 class ReviewController {
   async listReviews(req, res) {
@@ -31,14 +32,28 @@ class ReviewController {
     }
   }
 
+  //TODO: check here if it is reserved or not
   async createReview(req, res) {
     try {
-      const {userId, bikeId} = req.body;
-      if (req.user.role !== 'admin' && userId !== req.user.id) {
+      const userId = req.body.user;
+      const bikeId = req.body.bike;
+
+      if (req.user.role !== 'manager' && userId !== req.user.id) {
         return res.status(403).json({
           success: false,
           error: 'Not authorised.',
         });
+      }
+
+      const reservedStartTime = (
+        await reservesService.getReserveOfUserAndBike(userId, bikeId)
+      ).sort((a, b) => a.from.localeCompare(b.from));
+
+      const todayDate = new Date().toISOString().slice(0, 10);
+      if (todayDate < reservedStartTime[0].from) {
+        return res
+          .status(400)
+          .json({success: false, error: 'Have not used the bike yet'});
       }
 
       // Query in parallel to improve performance
@@ -69,18 +84,31 @@ class ReviewController {
     }
   }
 
+  //FIXME: check this properly
   async updateReviewById(req, res) {
     try {
-      const {userId, bikeId} = req.body;
+      const userId = req.body.user;
+      const bikeId = req.body.bike;
 
-      if (req.user.role !== 'admin' && userId !== req.user.id) {
+      if (req.user.role !== 'manager' && userId !== req.user.id) {
         return res.status(403).json({
           success: false,
           error: 'Not authorised.',
         });
       }
 
-      const review = await reviewsService.readById(req.params.reviewId);
+      const reservedStartTime = (
+        await reservesService.getReserveOfUserAndBike(userId, bikeId)
+      ).sort((a, b) => a.from.localeCompare(b.from));
+
+      const todayDate = new Date().toISOString().slice(0, 10);
+      if (todayDate < reservedStartTime[0].from) {
+        return res
+          .status(400)
+          .json({success: false, error: 'Have not used the bike yet'});
+      }
+
+      const review = await reviewsService.findById(req.params.reviewId);
 
       if (!review) {
         return res
@@ -91,7 +119,7 @@ class ReviewController {
       // Query in parallel to improve performance
       const [user, bike, reviewByUserAndBike] = await Promise.all([
         usersService.findById(userId),
-        bikesService.readById(bikeId),
+        bikesService.findById(bikeId),
         reviewsService.findByUserAndBike(userId, bikeId),
       ]);
 
@@ -102,10 +130,9 @@ class ReviewController {
       if (!bike) {
         return res.status(400).json({success: false, error: 'Invalid bike ID'});
       }
-
       if (
         reviewByUserAndBike &&
-        reviewByUserAndBike.id !== parseInt(req.params.reviewId, 10)
+        reviewByUserAndBike.id !== req.params.reviewId
       ) {
         return res.status(400).json({
           success: false,

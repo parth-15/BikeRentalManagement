@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import Reserve from '../models/reserve.model';
 
 class ReserveService {
@@ -20,7 +22,18 @@ class ReserveService {
     };
   }
 
+  async getReserveOfUserAndBike(userId, bikeId) {
+    const reserves = await Reserve.find({user: userId, bike: bikeId}).select(
+      'from',
+    );
+    console.log(reserves);
+    return reserves;
+  }
+
   async findById(reserveId) {
+    if (!mongoose.isValidObjectId(reserveId)) {
+      return null;
+    }
     const reserve = await Reserve.findById(reserveId);
     return reserve;
   }
@@ -48,6 +61,17 @@ class ReserveService {
       {new: true},
     );
     return updatedReserve.id;
+  }
+
+  async isBikeReserved(bikeId, startDate, endDate) {
+    console.log(bikeId);
+    const overlappingBikes = await Reserve.find({
+      bike: bikeId,
+      from: {$lte: endDate},
+      to: {$gte: startDate},
+    }).select('bike');
+    console.log(overlappingBikes);
+    return overlappingBikes.length > 0;
   }
 
   async deleteById(reserveId) {
