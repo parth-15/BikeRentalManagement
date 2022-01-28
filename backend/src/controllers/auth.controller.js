@@ -85,6 +85,12 @@ class AuthController {
 
   async createManager(req, res) {
     try {
+      if (req.user.role !== MANAGER) {
+        return res.status(400).json({
+          success: false,
+          error: 'Only Manager can create other manager',
+        });
+      }
       const managerByUsername = await usersService.findByUsername(
         req.body.username,
       );
@@ -92,12 +98,6 @@ class AuthController {
         return res.status(400).json({
           success: false,
           error: 'Manager already exists with this username',
-        });
-      }
-      if (req.user.role !== MANAGER) {
-        return res.status(400).json({
-          success: false,
-          error: 'Only Manager can create other manager',
         });
       }
       const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS, 10);
