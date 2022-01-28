@@ -2,6 +2,23 @@ import mongoose from 'mongoose';
 import User from '../models/user.model';
 
 class UsersService {
+  async list(page, perPage) {
+    let users;
+    let count = 0;
+    count = await User.countDocuments({});
+
+    await User.paginate({}, {page: page + 1, limit: perPage}).then(result => {
+      users = result.docs;
+    });
+
+    return {
+      count,
+      page,
+      perPage,
+      rows: users,
+    };
+  }
+
   async findById(id) {
     if (!mongoose.isValidObjectId(id)) {
       return null;
@@ -28,6 +45,19 @@ class UsersService {
     });
     const savedUser = await user.save();
     return savedUser.id;
+  }
+
+  async putById(userId, userData) {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        username: userData.username,
+        password: userData.password,
+        role: userData.role,
+      },
+      {new: true},
+    );
+    return updatedUser.id;
   }
 
   async deleteById(id) {
