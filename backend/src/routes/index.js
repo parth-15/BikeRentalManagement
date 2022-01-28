@@ -6,6 +6,7 @@ import reviewRouter from './review.router';
 import reserveRouter from './reserve.router';
 import userRouter from './user.router';
 import userReportRouter from './userReport.router';
+import bikeReportRouter from './bikeReport.router';
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use('/review', reviewRouter);
 router.use('/reserve', reserveRouter);
 router.use('/user', userRouter);
 router.use('/userReport', userReportRouter);
+router.use('/bikeReport', bikeReportRouter);
 
 export default router;
