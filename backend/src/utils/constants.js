@@ -1,3 +1,13 @@
 export const AUTHORIZATION = 'authorization';
 export const BEARER = 'Bearer';
 export const MANAGER = 'manager';
+export const USER = 'user';
+export const BIKE = 'bike';
+export const REVIEW = 'review';
+export const RESERVE = 'reserve';
+export const USERREPORT = 'userReport';
+export const BIKEREPORT = 'bikeReport';
+export const CREATE = 'create';
+export const READ = 'read';
+export const UPDATE = 'update';
+export const DELETE = 'delete';

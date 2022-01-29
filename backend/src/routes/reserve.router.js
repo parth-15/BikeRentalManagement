@@ -7,26 +7,42 @@ import {
   reserveUpdateValidator,
 } from '../validators/reserve.validator';
 import isAuthenticated from '../middlewares/auth.middleware';
+import hasPermission from '../middlewares/permission.middleware';
+import {CREATE, DELETE, READ, RESERVE, UPDATE} from '../utils/constants';
 
 const reserveRouter = Router();
 
 reserveRouter
   .route('/')
-  .get(isAuthenticated, reserveController.listReserves)
+  .get(
+    isAuthenticated,
+    hasPermission(READ, RESERVE),
+    reserveController.listReserves,
+  )
   .post(
     isAuthenticated,
+    hasPermission(CREATE, RESERVE),
     useValidator(reserveCreateValidator),
     reserveController.createReserve,
   );
 
 reserveRouter
   .route('/:reserveId')
-  .get(isAuthenticated, reserveController.getReserveById)
+  .get(
+    isAuthenticated,
+    hasPermission(READ, RESERVE),
+    reserveController.getReserveById,
+  )
   .put(
     isAuthenticated,
+    hasPermission(UPDATE, RESERVE),
     useValidator(reserveUpdateValidator),
     reserveController.updateReserveById,
   )
-  .delete(isAuthenticated, reserveController.removeReserve);
+  .delete(
+    isAuthenticated,
+    hasPermission(DELETE, RESERVE),
+    reserveController.removeReserve,
+  );
 
 export default reserveRouter;

@@ -1,27 +1,35 @@
+import {MANAGER, USER} from '../utils/constants';
+
 const resources = {
   user: {
-    create: ['manager'],
-    read: ['manager'],
-    update: ['manager'],
-    delete: ['manager'],
+    create: [MANAGER],
+    read: [MANAGER],
+    update: [MANAGER],
+    delete: [MANAGER],
   },
   bike: {
-    create: ['manager'],
-    read: ['manager', 'user'],
-    update: ['manager'],
-    delete: ['manager'],
+    create: [MANAGER],
+    read: [MANAGER, USER],
+    update: [MANAGER],
+    delete: [MANAGER],
   },
   review: {
-    create: ['manager', 'user'],
-    read: ['manager', 'user'],
-    update: ['manager'],
-    delete: ['manager'],
+    create: [MANAGER, USER],
+    read: [MANAGER],
+    update: [MANAGER],
+    delete: [MANAGER],
   },
   reserve: {
-    create: ['manager', 'user'],
+    create: [MANAGER, USER],
+    read: [MANAGER, USER],
+    update: [MANAGER],
+    delete: [MANAGER, USER],
   },
-  report: {
-    read: ['manager'],
+  userReport: {
+    read: [MANAGER],
+  },
+  bikeReport: {
+    read: [MANAGER],
   },
 };
 

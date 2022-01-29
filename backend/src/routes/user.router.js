@@ -6,28 +6,35 @@ import {
   userUpdateValidator,
 } from '../validators/user.validator';
 import useValidator from '../middlewares/validator.middleware';
-// import { hasPermission } from "../middlewares/permission.middleware";
 import isAuthenticated from '../middlewares/auth.middleware';
+import hasPermission from '../middlewares/permission.middleware';
+import {CREATE, DELETE, READ, UPDATE, USER} from '../utils/constants';
 
 const userRouter = Router();
 
 userRouter
   .route('/')
-  .get(isAuthenticated, usersController.listUsers)
+  .get(isAuthenticated, hasPermission(READ, USER), usersController.listUsers)
   .post(
     isAuthenticated,
+    hasPermission(CREATE, USER),
     useValidator(userCreateValidator),
     usersController.createUser,
   );
 
 userRouter
   .route('/:userId')
-  .get(isAuthenticated, usersController.getUserById)
+  .get(isAuthenticated, hasPermission(READ, USER), usersController.getUserById)
   .put(
     isAuthenticated,
+    hasPermission(UPDATE, USER),
     useValidator(userUpdateValidator),
     usersController.updateUserById,
   )
-  .delete(isAuthenticated, usersController.removeUser);
+  .delete(
+    isAuthenticated,
+    hasPermission(DELETE, USER),
+    usersController.removeUser,
+  );
 
 export default userRouter;
