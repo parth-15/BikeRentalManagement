@@ -100,6 +100,26 @@ class ReviewsService {
 
   async deleteById(reviewId) {
     await Review.findByIdAndDelete(reviewId);
+    const reviewData = await this.findById(reviewId);
+    const entries = await Review.aggregate([
+      {
+        $match: {
+          bike: {
+            $eq: new mongoose.Types.ObjectId(reviewData.bike),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$bike',
+          avg: {
+            $avg: '$rating',
+          },
+        },
+      },
+    ]);
+    console.log(entries);
+    await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return reviewId;
   }
 }

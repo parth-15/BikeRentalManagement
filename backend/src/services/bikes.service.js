@@ -5,7 +5,6 @@ import Bike from '../models/bike.model';
 import Reserve from '../models/reserve.model';
 
 class BikesService {
-  //FIXME: check following function properly
   async list(
     page,
     perPage,
@@ -18,16 +17,11 @@ class BikesService {
   ) {
     let bikes;
     let count = 0;
-    const filterObj = {};
-    if (model) {
-      filterObj['model'] = model;
-    }
-    if (color) {
-      filterObj['color'] = color;
-    }
-    if (location) {
-      filterObj['location'] = location;
-    }
+    const filterObj = {
+      ...(model && {model}),
+      ...(color && {color}),
+      ...(location && {location}),
+    };
     const overlappingBikes = await Reserve.find({
       from: {$lte: endDate},
       to: {$gte: startDate},

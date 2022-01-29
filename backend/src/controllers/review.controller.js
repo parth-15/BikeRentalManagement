@@ -32,7 +32,6 @@ class ReviewController {
     }
   }
 
-  //TODO: check here if it is reserved or not
   async createReview(req, res) {
     try {
       const userId = req.body.user;
@@ -84,7 +83,6 @@ class ReviewController {
     }
   }
 
-  //FIXME: check this properly
   async updateReviewById(req, res) {
     try {
       const userId = req.body.user;
