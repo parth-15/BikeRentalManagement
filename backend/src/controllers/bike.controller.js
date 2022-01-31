@@ -5,12 +5,6 @@ class BikeController {
     try {
       const page = parseInt(req.query.page, 10) || 0;
       const {model, color, location, startdate, enddate} = req.query;
-      if (!startdate || !enddate) {
-        res.status(400).json({
-          success: false,
-          error: 'Startdate and enddate is required',
-        });
-      }
       const rating = parseInt(req.query.rating, 10) || 0;
       const bikes = await bikesService.list(
         page,
