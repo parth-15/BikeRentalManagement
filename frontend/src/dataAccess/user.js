@@ -4,11 +4,11 @@ import getAuthorizationHeader from '../utils/authorization';
 
 const {baseUrl} = APIPaths;
 
-export const getAllReviews = async page => {
+export const getAllUsers = async page => {
   const headers = getAuthorizationHeader();
   const queryString = `?page=${page}`;
   return axios
-    .get(baseUrl + APIPaths.getAllReviews + queryString, {headers})
+    .get(baseUrl + APIPaths.getAllUsers + queryString, {headers})
     .then(response => response.data)
     .catch(
       err =>
@@ -19,10 +19,10 @@ export const getAllReviews = async page => {
     );
 };
 
-export const createReview = async reviewInput => {
+export const createUser = async userInput => {
   const headers = getAuthorizationHeader();
   return axios
-    .post(baseUrl + APIPaths.createReview, reviewInput, {
+    .post(baseUrl + APIPaths.createUser, userInput, {
       'Content-Type': 'application/json',
       headers,
     })
@@ -36,11 +36,11 @@ export const createReview = async reviewInput => {
     );
 };
 
-export const getReview = async reviewId => {
+export const getUser = async userId => {
   const headers = getAuthorizationHeader();
 
   return axios
-    .get(`${baseUrl}${APIPaths.getReview}/${reviewId}`, {
+    .get(`${baseUrl}${APIPaths.getUser}/${userId}`, {
       headers,
     })
     .then(response => response.data)
@@ -53,11 +53,11 @@ export const getReview = async reviewId => {
     );
 };
 
-export const updateReview = async (reviewId, reviewInput) => {
+export const updateUser = async (userId, userInput) => {
   const headers = getAuthorizationHeader();
 
   return axios
-    .put(`${baseUrl}${APIPaths.updateReview}/${reviewId}`, reviewInput, {
+    .put(`${baseUrl}${APIPaths.updateUser}/${userId}`, userInput, {
       'Content-type': 'application/json',
       headers,
     })
@@ -71,11 +71,11 @@ export const updateReview = async (reviewId, reviewInput) => {
     );
 };
 
-export const deleteReview = async reviewId => {
+export const deleteUser = async userId => {
   const headers = getAuthorizationHeader();
 
   return axios
-    .delete(`${baseUrl}${APIPaths.deleteReview}/${reviewId}`, {
+    .delete(`${baseUrl}${APIPaths.deleteUser}/${userId}`, {
       headers,
     })
     .then(response => response.data)
