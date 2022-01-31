@@ -1,5 +1,7 @@
 import {AppBar, Container, makeStyles, Tab, Tabs} from '@material-ui/core';
 import {useState} from 'react';
+import BikeTab from '../../components/admin/bike/BikeTab';
+import ReserveTab from '../../components/admin/reserve/ReserveTab';
 import UserTab from '../../components/admin/user/UserTab';
 import Navbar from '../../components/common/Navbar';
 
@@ -27,6 +29,8 @@ export default function Manager() {
           </Tabs>
         </AppBar>
         {value === 0 && <UserTab />}
+        {value === 1 && <BikeTab />}
+        {value === 2 && <ReserveTab />}
       </Container>
     </div>
   );
