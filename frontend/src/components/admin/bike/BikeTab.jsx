@@ -53,7 +53,7 @@ export default function BikeTab() {
     <div>
       <Box my={5} style={{display: 'flex'}}>
         <Typography variant="h5" style={{flexGrow: 1}}>
-          Manage Users
+          Manage Bikes
         </Typography>
         <Button
           variant="contained"

@@ -24,7 +24,6 @@ export default function CreateUserModal({open, onClose, onCreate}) {
     },
     validationSchema,
     onSubmit: (values, {resetForm}) => {
-      console.log(values);
       onCreate(values);
       resetForm();
     },
