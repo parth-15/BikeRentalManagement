@@ -6,7 +6,7 @@ const {baseUrl} = APIPaths;
 
 export const getAllReserves = async (page, user) => {
   const headers = getAuthorizationHeader();
-  const queryString = `?page=${page}&user=${user}`;
+  const queryString = `?page=${page}`.concat(user ? `&user=${user}` : '');
   return axios
     .get(baseUrl + APIPaths.getAllReserves + queryString, {headers})
     .then(response => response.data)
