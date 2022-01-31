@@ -13,6 +13,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import {useEffect, useState} from 'react';
 import {getAllBikes} from '../../dataAccess/bike';
 import BikeCard from '../../components/home/BikeCard';
+import {getFilterData} from '../../dataAccess/filterData';
 
 const useStyles = makeStyles(theme => ({
   paginationContainer: {display: 'flex', justifyContent: 'center'},
@@ -60,6 +61,11 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
   const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
+  const [filterData, setFilterData] = useState({
+    models: [],
+    colors: [],
+    locations: [],
+  });
   const filterObj = {
     ...(model && {
       model,
@@ -74,6 +80,7 @@ export default function Home() {
     startdate: startDate,
     enddate: endDate,
   };
+
   useEffect(() => {
     // Pagination starts from zero in backend
     getAllBikes(currentPage - 1, filterObj).then(({data}) => {
@@ -81,6 +88,12 @@ export default function Home() {
       setTotalPages(Math.ceil(data.count / data.perPage));
     });
   }, [currentPage, model, color, location, rating, startDate, endDate]);
+
+  useEffect(() => {
+    getFilterData().then(({data}) => {
+      setFilterData(data);
+    });
+  }, []);
 
   const handleModelChange = e => {
     setCurrentPage(1);
@@ -116,6 +129,8 @@ export default function Home() {
     setCurrentPage(count);
   };
 
+  console.log(filterObj);
+
   return (
     <div>
       <Container>
@@ -137,70 +152,30 @@ export default function Home() {
 
         <Box>
           <FormControl className={classes.filter}>
-            <TextField
-              id="outlined-basic"
-              label="Model"
-              variant="outlined"
-              InputLabelProps={{
-                classes: {
-                  root: classes.cssLabel,
-                  focused: classes.cssFocused,
-                },
-              }}
-              InputProps={{
-                classes: {
-                  root: classes.cssOutlinedInput,
-                  focused: classes.cssFocused,
-                  notchedOutline: classes.notchedOutline,
-                },
-              }}
-              value={model}
-              onChange={handleModelChange}
-            />
+            <InputLabel>Model</InputLabel>
+            <Select id="model" value={model} label="Model" onChange={handleModelChange}>
+              <MenuItem value={null}>No filter</MenuItem>
+              {filterData.models &&
+                filterData.models.map(model => <MenuItem value={model}>{model}</MenuItem>)}
+            </Select>
           </FormControl>
           <FormControl className={classes.filter}>
-            <TextField
-              id="outlined-basic"
-              label="Color"
-              variant="outlined"
-              InputLabelProps={{
-                classes: {
-                  root: classes.cssLabel,
-                  focused: classes.cssFocused,
-                },
-              }}
-              InputProps={{
-                classes: {
-                  root: classes.cssOutlinedInput,
-                  focused: classes.cssFocused,
-                  notchedOutline: classes.notchedOutline,
-                },
-              }}
-              value={color}
-              onChange={handleColorChange}
-            />
+            <InputLabel>Color</InputLabel>
+            <Select id="color" value={color} label="Color" onChange={handleColorChange}>
+              <MenuItem value={null}>No filter</MenuItem>
+              {filterData.colors &&
+                filterData.colors.map(color => <MenuItem value={color}>{color}</MenuItem>)}
+            </Select>
           </FormControl>
           <FormControl className={classes.filter}>
-            <TextField
-              id="outlined-basic"
-              label="Location"
-              variant="outlined"
-              InputLabelProps={{
-                classes: {
-                  root: classes.cssLabel,
-                  focused: classes.cssFocused,
-                },
-              }}
-              InputProps={{
-                classes: {
-                  root: classes.cssOutlinedInput,
-                  focused: classes.cssFocused,
-                  notchedOutline: classes.notchedOutline,
-                },
-              }}
-              value={location}
-              onChange={handleLocationChange}
-            />
+            <InputLabel>Location</InputLabel>
+            <Select id="location" value={location} label="Location" onChange={handleLocationChange}>
+              <MenuItem value={null}>No filter</MenuItem>
+              {filterData.locations &&
+                filterData.locations.map(location => (
+                  <MenuItem value={location}>{location}</MenuItem>
+                ))}
+            </Select>
           </FormControl>
           <FormControl className={classes.filter}>
             <TextField
