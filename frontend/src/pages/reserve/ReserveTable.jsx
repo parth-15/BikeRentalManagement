@@ -71,7 +71,6 @@ export default function ReserveTable({
     setPage(page);
     fetchReserves(page);
   };
-  console.log(reserves);
   return (
     <>
       <CreateReviewModal
@@ -103,8 +102,8 @@ export default function ReserveTable({
             {reserves.map(row => (
               <TableRow key={row.id}>
                 <TableCell>{row.id}</TableCell>
-                <TableCell>{row.bike.id}</TableCell>
-                <TableCell>{row.bike.model}</TableCell>
+                <TableCell>{row.bike && row.bike.id}</TableCell>
+                <TableCell>{row.bike && row.bike.model}</TableCell>
                 <TableCell>{row.from}</TableCell>
                 <TableCell>{row.to}</TableCell>
                 <TableCell>
