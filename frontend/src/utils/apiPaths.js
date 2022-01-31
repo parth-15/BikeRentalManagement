@@ -20,4 +20,10 @@ export const getReview = '/api/v1/review';
 export const updateReview = '/api/v1/review';
 export const deleteReview = '/api/v1/review';
 
+export const getAllUsers = '/api/v1/user';
+export const createUser = '/api/v1/user';
+export const getUser = '/api/v1/user';
+export const updateUser = '/api/v1/user';
+export const deleteUser = '/api/v1/user';
+
 export const baseUrl = 'http://localhost:3003';
