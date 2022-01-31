@@ -6,7 +6,8 @@ const {baseUrl} = APIPaths;
 
 export const getAllBikes = async (page, filterObj) => {
   const headers = getAuthorizationHeader();
-  const queryString = `?page=${page}&${new URLSearchParams(filterObj).toString()}`;
+  const filterString = new URLSearchParams(filterObj).toString();
+  const queryString = `?page=${page}`.concat(filterString.length > 0 ? `&${filterString}` : '');
   console.log(queryString);
   return axios
     .get(baseUrl + APIPaths.getAllBikes + queryString, {headers})
@@ -26,7 +27,7 @@ export const createBike = async bikeInput => {
   return axios
     .post(baseUrl + APIPaths.createBike, bikeInput, {
       'Content-Type': 'application/json',
-      ...headers,
+      headers,
     })
     .then(response => response.data)
     .catch(
@@ -43,7 +44,7 @@ export const getBike = async bikeId => {
 
   return axios
     .get(`${baseUrl}${APIPaths.getBike}/${bikeId}`, {
-      ...headers,
+      headers,
     })
     .then(response => response.data)
     .catch(
@@ -61,7 +62,7 @@ export const updateBike = async (bikeId, bikeInput) => {
   return axios
     .put(`${baseUrl}${APIPaths.updateBike}/${bikeId}`, bikeInput, {
       'Content-type': 'application/json',
-      ...headers,
+      headers,
     })
     .then(response => response.data)
     .catch(
@@ -78,7 +79,7 @@ export const deleteBike = async bikeId => {
 
   return axios
     .delete(`${baseUrl}${APIPaths.deleteBike}/${bikeId}`, {
-      ...headers,
+      headers,
     })
     .then(response => response.data)
     .catch(
