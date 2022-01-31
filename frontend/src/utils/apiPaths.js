@@ -26,4 +26,6 @@ export const getUser = '/api/v1/user';
 export const updateUser = '/api/v1/user';
 export const deleteUser = '/api/v1/user';
 
+export const getFilterData = '/api/v1/filterData';
+
 export const baseUrl = 'http://localhost:3003';
