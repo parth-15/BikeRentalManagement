@@ -3,6 +3,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -53,7 +55,6 @@ export default function CreateBikeModal({open, onClose, onCreate}) {
           />
 
           <TextField
-            autoFocus
             label="Color"
             id="color"
             name="color"
@@ -68,7 +69,6 @@ export default function CreateBikeModal({open, onClose, onCreate}) {
           />
 
           <TextField
-            autoFocus
             label="Location"
             id="location"
             name="location"
@@ -82,6 +82,7 @@ export default function CreateBikeModal({open, onClose, onCreate}) {
             style={{marginTop: 15, marginBottom: 15}}
           />
 
+          <InputLabel>Available</InputLabel>
           <Select
             label="Available"
             name="available"
