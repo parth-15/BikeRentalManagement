@@ -129,8 +129,6 @@ export default function Home() {
     setCurrentPage(count);
   };
 
-  console.log(filterObj);
-
   return (
     <div>
       <Container>

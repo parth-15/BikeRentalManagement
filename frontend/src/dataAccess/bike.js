@@ -8,7 +8,6 @@ export const getAllBikes = async (page, filterObj) => {
   const headers = getAuthorizationHeader();
   const filterString = new URLSearchParams(filterObj).toString();
   const queryString = `?page=${page}`.concat(filterString.length > 0 ? `&${filterString}` : '');
-  console.log(queryString);
   return axios
     .get(baseUrl + APIPaths.getAllBikes + queryString, {headers})
     .then(response => response.data)
