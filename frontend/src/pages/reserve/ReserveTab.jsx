@@ -12,8 +12,8 @@ export default function ReserveTab() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [openAlert, setOpenAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('success');
-  const [alertMessage, setAlertMessage] = useState('Success!');
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const fetchReserves = page => {
     getAllReserves(page, user.id).then(({data}) => {
@@ -31,7 +31,6 @@ export default function ReserveTab() {
     setAlertMessage(message);
     setOpenAlert(true);
   };
-
   return (
     <div>
       <Box my={5} style={{display: 'flex'}}>

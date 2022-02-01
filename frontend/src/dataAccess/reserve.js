@@ -4,9 +4,11 @@ import getAuthorizationHeader from '../utils/authorization';
 
 const {baseUrl} = APIPaths;
 
-export const getAllReserves = async (page, user) => {
+export const getAllReserves = async (page, user, bike) => {
   const headers = getAuthorizationHeader();
-  const queryString = `?page=${page}`.concat(user ? `&user=${user}` : '');
+  const queryString = `?page=${page}`
+    .concat(user ? `&user=${user}` : '')
+    .concat(bike ? `&bike=${bike}` : '');
   return axios
     .get(baseUrl + APIPaths.getAllReserves + queryString, {headers})
     .then(response => response.data)
