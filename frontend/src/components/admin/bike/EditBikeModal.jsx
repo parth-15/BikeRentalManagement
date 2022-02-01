@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -82,6 +83,7 @@ export default function EditBikeModal({open, onClose, bike, onEdit}) {
             style={{marginTop: 15, marginBottom: 15}}
           />
 
+          <InputLabel>Available</InputLabel>
           <Select
             label="Available"
             name="available"

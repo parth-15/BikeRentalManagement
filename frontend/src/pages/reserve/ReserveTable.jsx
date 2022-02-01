@@ -38,7 +38,7 @@ export default function ReserveTable({
   };
 
   const handleReviewModal = reviewInput => {
-    createReview({...reviewInput, user: reviewTarget.user, bike: reviewTarget.bike.id}).then(
+    createReview({...reviewInput, user: reviewTarget.user.id, bike: reviewTarget.bike.id}).then(
       ({success, error}) => {
         if (success) {
           handleOpenAlert('success', 'Review created successfully');
