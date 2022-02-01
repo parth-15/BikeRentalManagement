@@ -61,7 +61,6 @@ class ReviewsService {
         },
       },
     ]);
-    console.log(entries);
     await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return savedReview.id;
   }
@@ -93,7 +92,6 @@ class ReviewsService {
         },
       },
     ]);
-    console.log(entries);
     await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return updatedReview.id;
   }
@@ -118,7 +116,6 @@ class ReviewsService {
         },
       },
     ]);
-    console.log(entries);
     await bikesService.updateBikeRating(reviewData.bike, entries[0].avg);
     return reviewId;
   }

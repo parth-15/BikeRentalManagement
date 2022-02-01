@@ -32,7 +32,6 @@ class ReserveService {
     const reserves = await Reserve.find({user: userId, bike: bikeId}).select(
       'from',
     );
-    console.log(reserves);
     return reserves;
   }
 
@@ -70,7 +69,6 @@ class ReserveService {
   }
 
   async isBikeReserved(bikeId, startDate, endDate) {
-    console.log(bikeId);
     const overlappingBikes = await Reserve.find({
       bike: bikeId,
       from: {$lte: endDate},

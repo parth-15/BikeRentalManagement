@@ -67,7 +67,6 @@ class ReserveController {
           .json({success: false, error: 'Bike not available'});
       }
       const isReserved = await reserveService.isBikeReserved(bike, from, to);
-      console.log(isReserved);
       if (isReserved) {
         return res
           .status(400)

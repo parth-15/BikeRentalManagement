@@ -35,7 +35,6 @@ class BikesService {
       },
       _id: {$nin: overlappingBikes},
     });
-    console.log(count);
 
     await Bike.paginate(
       {
