@@ -7,6 +7,7 @@ import reserveRouter from './reserve.router';
 import userRouter from './user.router';
 import userReportRouter from './userReport.router';
 import bikeReportRouter from './bikeReport.router';
+import filterDataRouter from './filterData.router';
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use('/reserve', reserveRouter);
 router.use('/user', userRouter);
 router.use('/userReport', userReportRouter);
 router.use('/bikeReport', bikeReportRouter);
+router.use('/filterData', filterDataRouter);
 
 export default router;

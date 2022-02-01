@@ -7,6 +7,7 @@ export const REVIEW = 'review';
 export const RESERVE = 'reserve';
 export const USERREPORT = 'userReport';
 export const BIKEREPORT = 'bikeReport';
+export const FILTERDATA = 'filterData';
 export const CREATE = 'create';
 export const READ = 'read';
 export const UPDATE = 'update';
