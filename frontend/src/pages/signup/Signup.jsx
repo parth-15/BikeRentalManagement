@@ -3,18 +3,20 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link as RouterLink} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import {useState} from 'react';
+import {IconButton, InputAdornment} from '@material-ui/core';
 import Container from '@material-ui/core/Container';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as yup from 'yup';
-import { me, signup } from '../../dataAccess/auth';
-import { useUpdateAuthenticatedUser } from '../../providers/AuthProvider';
-import { AUTHTOKEN } from '../../utils/constant';
+import {Visibility, VisibilityOff} from '@material-ui/icons';
+import {me, signup} from '../../dataAccess/auth';
+import {useUpdateAuthenticatedUser} from '../../providers/AuthProvider';
+import {AUTHTOKEN} from '../../utils/constant';
 import Alert from '../../components/common/Alert';
 
 const validationSchema = yup.object({
@@ -22,7 +24,7 @@ const validationSchema = yup.object({
   password: yup.string().required('This field cannot be empty').min(6),
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -48,6 +50,9 @@ export default function Signup() {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleOpenAlert = (severity, message) => {
     setAlertSeverity(severity);
@@ -61,12 +66,12 @@ export default function Signup() {
       password: '',
     },
     validationSchema,
-    onSubmit: (values) => {
-      signup(values).then(({ success, token, error }) => {
+    onSubmit: values => {
+      signup(values).then(({success, token, error}) => {
         if (success) {
           localStorage.setItem(AUTHTOKEN, token);
 
-          me().then(({ success, user }) => {
+          me().then(({success, user}) => {
             if (success) {
               handleOpenAlert('success', 'Signup successful');
               updateAuthenticatedUser(user);
@@ -113,13 +118,25 @@ export default function Signup() {
                 required
                 fullWidth
                 name="password"
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 error={formik.touched.password && formik.errors.password}
                 helperText={formik.errors.password}
                 label="Password"
-                type="password"
-                id="password"
                 autoComplete="current-password"
               />
             </Grid>

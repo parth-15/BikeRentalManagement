@@ -3,11 +3,15 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  IconButton,
+  InputAdornment,
   MenuItem,
   Select,
   TextField,
 } from '@material-ui/core';
+import {Visibility, VisibilityOff} from '@material-ui/icons';
 import {useFormik} from 'formik';
+import {useState} from 'react';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
@@ -28,6 +32,9 @@ export default function CreateUserModal({open, onClose, onCreate}) {
       resetForm();
     },
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -51,8 +58,20 @@ export default function CreateUserModal({open, onClose, onCreate}) {
           <TextField
             label="Password"
             variant="outlined"
-            id="name"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             fullWidth
             name="password"
             value={formik.values.password}

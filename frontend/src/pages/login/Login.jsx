@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {Visibility, VisibilityOff} from '@material-ui/icons';
+import {IconButton, InputAdornment} from '@material-ui/core';
 
 import {useFormik} from 'formik';
 import * as yup from 'yup';
@@ -52,6 +54,9 @@ export default function Login() {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleOpenAlert = (severity, message) => {
     setAlertSeverity(severity);
@@ -112,8 +117,20 @@ export default function Login() {
             margin="normal"
             fullWidth
             label="Password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id="password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && formik.errors.password}

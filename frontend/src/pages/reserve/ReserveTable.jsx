@@ -17,7 +17,6 @@ import {deleteReserve} from '../../dataAccess/reserve';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import CreateReviewModal from '../../components/review/CreateReviewModal';
 import {createReview} from '../../dataAccess/review';
-import {useAuthenticatedUser} from '../../providers/AuthProvider';
 
 export default function ReserveTable({
   reserves,
