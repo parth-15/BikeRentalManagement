@@ -16,13 +16,13 @@ const resources = {
   review: {
     create: [MANAGER, USER],
     read: [MANAGER],
-    update: [MANAGER],
-    delete: [MANAGER],
+    update: [],
+    delete: [],
   },
   reserve: {
     create: [MANAGER, USER],
     read: [MANAGER, USER],
-    update: [MANAGER],
+    update: [],
     delete: [MANAGER, USER],
   },
   userReport: {
@@ -30,6 +30,9 @@ const resources = {
   },
   bikeReport: {
     read: [MANAGER],
+  },
+  filterData: {
+    read: [MANAGER, USER],
   },
 };
 

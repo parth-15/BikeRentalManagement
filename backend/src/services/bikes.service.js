@@ -22,11 +22,12 @@ class BikesService {
       ...(color && {color}),
       ...(location && {location}),
     };
-    const overlappingBikes = await Reserve.find({
-      from: {$lte: endDate},
-      to: {$gte: startDate},
-    }).select('bike');
-    console.log(overlappingBikes);
+    const overlappingBikes = (
+      await Reserve.find({
+        from: {$lte: endDate},
+        to: {$gte: startDate},
+      })
+    ).map(bike => bike.bike);
     count = await Bike.countDocuments({
       ...filterObj,
       rating: {
@@ -34,6 +35,7 @@ class BikesService {
       },
       _id: {$nin: overlappingBikes},
     });
+    console.log(count);
 
     await Bike.paginate(
       {
@@ -56,6 +58,11 @@ class BikesService {
     };
   }
 
+  async listAllBikes() {
+    const bikes = await Bike.find({});
+    return bikes;
+  }
+
   async findById(bikeId) {
     if (!mongoose.isValidObjectId(bikeId)) {
       return null;
@@ -69,6 +76,7 @@ class BikesService {
       model: bikeData.model,
       color: bikeData.color,
       location: bikeData.location,
+      available: bikeData.available,
     });
     const savedBike = await bike.save();
     return savedBike.id;

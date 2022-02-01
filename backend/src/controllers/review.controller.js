@@ -47,9 +47,8 @@ class ReviewController {
       const reservedStartTime = (
         await reservesService.getReserveOfUserAndBike(userId, bikeId)
       ).sort((a, b) => a.from.localeCompare(b.from));
-
       const todayDate = new Date().toISOString().slice(0, 10);
-      if (todayDate < reservedStartTime[0].from) {
+      if (todayDate <= reservedStartTime[0].from) {
         return res
           .status(400)
           .json({success: false, error: 'Have not used the bike yet'});

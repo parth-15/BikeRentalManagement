@@ -52,7 +52,7 @@ class UserController {
       if (userByUsername) {
         return res.status(400).json({
           success: false,
-          error: 'User with this username already exist',
+          error: 'username already exist',
         });
       }
 

@@ -3,26 +3,22 @@ import mongoose from 'mongoose';
 import Reserve from '../models/reserve.model';
 
 class ReserveService {
-  async list(user, page, perPage) {
+  async list(user, bike, page, perPage) {
     let reserves;
     let count = 0;
-    if (user) {
-      count = await Reserve.countDocuments({user});
+    const filterObj = {
+      ...(user && {user}),
+      ...(bike && {bike}),
+    };
+    count = await Reserve.countDocuments(filterObj);
 
-      await Reserve.paginate({user}, {page: page + 1, limit: perPage}).then(
-        result => {
-          reserves = result.docs;
-        },
-      );
-    } else {
-      count = await Reserve.countDocuments({});
-
-      await Reserve.paginate({}, {page: page + 1, limit: perPage}).then(
-        result => {
-          reserves = result.docs;
-        },
-      );
-    }
+    await Reserve.paginate(filterObj, {
+      populate: ['user', 'bike'],
+      page: page + 1,
+      limit: perPage,
+    }).then(result => {
+      reserves = result.docs;
+    });
 
     return {
       count,
@@ -81,6 +77,14 @@ class ReserveService {
       to: {$gte: startDate},
     });
     return overlappingBikes.length > 0;
+  }
+
+  async isReservedCompleted(reserveId) {
+    const reserve = await this.findById(reserveId);
+    if (reserve.to < new Date().toISOString().slice(0, 10)) {
+      return true;
+    }
+    return false;
   }
 
   async deleteById(reserveId) {
