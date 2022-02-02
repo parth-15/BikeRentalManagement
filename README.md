@@ -9,10 +9,10 @@ Completed
 
 # Project Screen Shot
 
-![SignIn](./res/Signin.png)
-![HomePage](./res/Home_screen.png)
-![Manager Panel](./res/Manager_panel.png)
-![Reserves](./res/Reserves.png)
+![SignIn](./res/Signin.png "Signin")
+![HomePage](./res/Home_screen.png "Home Screen")
+![Manager Panel](./res/Manager_panel.png "Manager Panel")
+![Reserves](./res/Reserves.png "Reserves")
 
 # Installation and Setup Instructions
 
