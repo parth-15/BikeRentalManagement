@@ -4,6 +4,9 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Grid,
   makeStyles,
   Typography,
@@ -90,21 +93,12 @@ export default function BikeCard({id, model, color, location, rating, available}
               </Box>
             </Box>
 
-            {available ? (
-              <Grid container direction="row" alignItems="center">
-                <Grid item>
-                  <DirectionsBikeOutlined />
-                </Grid>
-                <Grid item>Available</Grid>
-              </Grid>
-            ) : (
-              <Grid container direction="row" alignItems="center">
-                <Grid item>
-                  <CancelOutlined />
-                </Grid>
-                <Grid item>UnAvailable</Grid>
-              </Grid>
-            )}
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={available} color="success" />}
+                label="Available"
+              />
+            </FormGroup>
             {available && (
               <Button color="primary" variant="contained" onClick={toggleCreateModalOpen}>
                 Reserve
